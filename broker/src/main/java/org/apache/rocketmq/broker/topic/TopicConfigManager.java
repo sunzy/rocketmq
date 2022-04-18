@@ -66,7 +66,9 @@ public class TopicConfigManager extends ConfigManager {
             this.topicConfigTable.put(topicConfig.getTopicName(), topicConfig);
         }
         {
+            //1. 判断是否开户自动创建Topic的开关(默认是true)
             if (this.brokerController.getBrokerConfig().isAutoCreateTopicEnable()) {
+                // 添加默认的Topic("TBW102")信息
                 String topic = TopicValidator.AUTO_CREATE_TOPIC_KEY_TOPIC;
                 TopicConfig topicConfig = new TopicConfig(topic);
                 TopicValidator.addSystemTopic(topic);
@@ -161,13 +163,17 @@ public class TopicConfigManager extends ConfigManager {
         try {
             if (this.topicConfigTableLock.tryLock(LOCK_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)) {
                 try {
+                    //再次查询Topic信息
                     topicConfig = this.topicConfigTable.get(topic);
                     if (topicConfig != null)
                         return topicConfig;
 
+                    //获取默认加载的Topic信息
                     TopicConfig defaultTopicConfig = this.topicConfigTable.get(defaultTopic);
                     if (defaultTopicConfig != null) {
+                        //判断是不是自动创建的Topic信息
                         if (defaultTopic.equals(TopicValidator.AUTO_CREATE_TOPIC_KEY_TOPIC)) {
+                            //判断是否开启了自动创建
                             if (!this.brokerController.getBrokerConfig().isAutoCreateTopicEnable()) {
                                 defaultTopicConfig.setPerm(PermName.PERM_READ | PermName.PERM_WRITE);
                             }

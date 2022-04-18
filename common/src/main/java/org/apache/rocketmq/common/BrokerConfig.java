@@ -82,6 +82,7 @@ public class BrokerConfig {
 
     @ImportantField
     private boolean rejectTransactionMessage = false;
+    //是否从web服务器获取Name Server地址，针对大规模的Broker集群建议使用这种方式
     @ImportantField
     private boolean fetchNamesrvAddrByAddressServer = false;
     private int sendThreadPoolQueueCapacity = 10000;

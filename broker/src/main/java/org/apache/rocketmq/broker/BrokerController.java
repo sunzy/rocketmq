@@ -418,9 +418,11 @@ public class BrokerController {
             }, 1000 * 10, 1000 * 60, TimeUnit.MILLISECONDS);
 
             if (this.brokerConfig.getNamesrvAddr() != null) {
+                //如果配置文件里配置了namesrvAddr
                 this.brokerOuterAPI.updateNameServerAddressList(this.brokerConfig.getNamesrvAddr());
                 log.info("Set user specified name server address: {}", this.brokerConfig.getNamesrvAddr());
             } else if (this.brokerConfig.isFetchNamesrvAddrByAddressServer()) {
+                //TODO 这里还有另一种拿NameSrv的方式
                 this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
                     @Override

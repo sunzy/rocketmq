@@ -603,13 +603,14 @@ public class MQClientInstance {
         }
     }
 
-    public boolean updateTopicRouteInfoFromNameServer(final String topic, boolean isDefault,
+public boolean updateTopicRouteInfoFromNameServer(final String topic, boolean isDefault,
         DefaultMQProducer defaultMQProducer) {
         try {
             if (this.lockNamesrv.tryLock(LOCK_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)) {
                 try {
                     TopicRouteData topicRouteData;
                     if (isDefault && defaultMQProducer != null) {
+                        //获取默认的Topic路由信息  defaultMQProducer.getCreateTopicKey() 返回 "TBW102"
                         topicRouteData = this.mQClientAPIImpl.getDefaultTopicRouteInfoFromNameServer(defaultMQProducer.getCreateTopicKey(),
                             clientConfig.getMqClientApiTimeout());
                         if (topicRouteData != null) {

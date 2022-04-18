@@ -180,6 +180,7 @@ public abstract class AbstractSendMessageProcessor extends AsyncNettyRequestProc
             return response;
         }
 
+        //查询 Topic 路由信息
         TopicConfig topicConfig =
             this.brokerController.getTopicConfigManager().selectTopicConfig(requestHeader.getTopic());
         if (null == topicConfig) {
@@ -193,6 +194,7 @@ public abstract class AbstractSendMessageProcessor extends AsyncNettyRequestProc
             }
 
             log.warn("the topic {} not exist, producer: {}", requestHeader.getTopic(), ctx.channel().remoteAddress());
+            //不存在，createTopicInSendMessageMethod逻辑
             topicConfig = this.brokerController.getTopicConfigManager().createTopicInSendMessageMethod(
                 requestHeader.getTopic(),
                 requestHeader.getDefaultTopic(),
